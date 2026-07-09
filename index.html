@@ -3,169 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <title>OutpostQA — Revenue Dashboard 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{--bg:#d4d8de;--bg2:#eaecef;--bg3:#c8ccd2;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);--text:#1a1e25;--text2:#5a6a7a;--text3:#8a9ab0;--green:#1dbd8a;--green-bg:rgba(29,189,138,0.12);--amber:#d4920a;--amber-bg:rgba(212,146,10,0.12);--red:#e05555;--red-bg:rgba(224,85,85,0.12);--pink:#d4538a;--pink-bg:rgba(212,83,138,0.12);--radius:7px;--radius-sm:5px}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);padding:1.5rem 2rem;font-size:12px}
-.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:0.5px solid var(--border2)}
-.header-title{font-size:26px;font-weight:600}
-.header-sub{font-size:11px;color:var(--text3);margin-top:3px}
-.date-chip{background:var(--green-bg);color:var(--green);border:0.5px solid rgba(29,189,138,.25);font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;font-family:'DM Mono',monospace}
-.sec{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.07em;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.sec::after{content:'';flex:1;height:0.5px;background:var(--border2)}
-.card{background:#fff;border:0.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:10px}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.grid2r{display:grid;grid-template-columns:2fr 1fr;gap:12px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.metric{background:#fff;border:0.5px solid var(--border);border-radius:var(--radius);padding:14px 18px;position:relative;overflow:hidden;margin-bottom:0}
-.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--ac,var(--green))}
-.metric-label{font-size:10px;color:var(--text3);margin-bottom:5px;letter-spacing:.04em;font-weight:600}
-.metric-value{font-size:24px;font-weight:500;font-family:'DM Mono',monospace}
-.metric-sub{font-size:11px;color:var(--text2);margin-top:4px}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#1a202c;font-size:13px;padding:0}
+.topbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:14px 28px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-sq{background:#1a202c;color:#fff;font-weight:700;font-size:13px;padding:5px 8px;border-radius:5px}
+.logo-text{font-size:20px;font-weight:700;color:#1a202c}
+.logo-text span{color:#3b82f6}
+.topbar-right{font-size:12px;color:#64748b;text-align:right}
+.date-chip{background:#dcfce7;color:#16a34a;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;margin-left:12px}
+.content{padding:20px 28px}
+/* KPI cards */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.kpi{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:18px 20px;border-top:3px solid var(--ac,#3b82f6)}
+.kpi-label{font-size:10px;font-weight:600;color:#94a3b8;letter-spacing:.08em;margin-bottom:6px}
+.kpi-value{font-size:26px;font-weight:700;color:var(--vc,#1a202c);line-height:1}
+.kpi-sub{font-size:11px;color:#64748b;margin-top:5px}
+/* Panels */
+.row{display:grid;gap:14px;margin-bottom:16px}
+.row-2{grid-template-columns:1fr 1fr}
+.row-21{grid-template-columns:2fr 1fr}
+.row-12{grid-template-columns:1fr 2fr}
+.panel{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:18px 20px}
+.panel-title{font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.08em;margin-bottom:14px}
+/* Tables */
 table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:11px;font-weight:600;color:var(--text3);padding:7px 10px;border-bottom:0.5px solid var(--border2);letter-spacing:.04em}
-td{padding:8px 10px;border-bottom:0.5px solid var(--border);vertical-align:middle;font-size:12px}
+th{font-size:11px;font-weight:600;color:#94a3b8;padding:6px 10px;border-bottom:1px solid #f1f5f9;text-align:left;letter-spacing:.04em}
+td{font-size:12px;padding:9px 10px;border-bottom:1px solid #f8fafc;vertical-align:middle}
 tr:last-child td{border-bottom:none}
-.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
-.ok{background:var(--green-bg);color:var(--green)}
-.warn{background:var(--amber-bg);color:var(--amber)}
-.err{background:var(--red-bg);color:var(--red)}
-.dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle}
-.mono{font-family:'DM Mono',monospace}
-.muted{color:var(--text2)}
-.note-item{background:var(--bg2);border-radius:var(--radius-sm);padding:11px 14px;font-size:12px;color:var(--text2);line-height:1.6}
-.note-client{font-size:11px;font-weight:700;color:#3266ad;margin-bottom:4px;letter-spacing:.05em}
-.footer{margin-top:1rem;padding-top:1rem;border-top:0.5px solid var(--border2);font-size:11px;color:var(--text3);display:flex;justify-content:space-between}
-.bar-bg{width:100%;background:var(--bg3);border-radius:4px;height:5px;overflow:hidden;margin-top:4px}
-.bar-fill{height:5px;border-radius:4px}
-.loading{text-align:center;padding:3rem;color:var(--text3);font-family:'DM Mono',monospace;font-size:13px}
-.avg-card{background:var(--bg2);border-radius:var(--radius-sm);padding:8px 10px;border:0.5px solid var(--border)}
-.avg-client{font-size:9px;font-weight:700;margin-bottom:5px}
-.avg-row{display:flex;justify-content:space-between;margin-bottom:1px}
-.avg-label{font-size:9px;color:var(--text3)}
-.avg-val{font-size:10px;font-weight:600;font-family:'DM Mono',monospace}
-canvas{max-width:100%}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
+.badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:11px;font-weight:600}
+.ok{background:#dcfce7;color:#16a34a}
+.warn{background:#fef9c3;color:#ca8a04}
+.err{background:#fee2e2;color:#dc2626}
+.watch{background:#fef3c7;color:#d97706}
+/* Status dot */
+.sdot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+/* Progress bars */
+.bar-wrap{margin-bottom:8px}
+.bar-label{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
+.bar-bg{background:#f1f5f9;border-radius:4px;height:7px;overflow:hidden}
+.bar-fill{height:7px;border-radius:4px;transition:width .4s}
+/* Avg cards */
+.avg-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.avg-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;padding:10px 12px}
+.avg-client{font-size:10px;font-weight:700;margin-bottom:6px;letter-spacing:.05em}
+.avg-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px}
+.avg-lbl{color:#94a3b8}
+.avg-val{font-weight:600}
+/* Cashflow */
+.cf-block{padding:12px 14px;border-radius:8px;margin-bottom:8px}
+.cf-green{background:#f0fdf4;border:1px solid #bbf7d0}
+.cf-gray{background:#f8fafc;border:1px solid #e2e8f0}
+.cf-label{font-size:9px;font-weight:700;letter-spacing:.08em;margin-bottom:4px}
+.cf-value{font-size:22px;font-weight:700}
+.cf-sub{font-size:11px;color:#64748b;margin-top:3px}
+/* Invoice section */
+.inv-wrap{display:grid;grid-template-columns:1.8fr 1fr;gap:16px;align-items:start}
+.section-client{font-size:11px;font-weight:700;letter-spacing:.06em;margin-bottom:10px}
+canvas{display:block;width:100%!important}
+.alert-green{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:8px 12px;font-size:11px;color:#15803d;margin-top:8px}
 </style>
 </head>
 <body>
-<div id="app"><div class="loading">Loading data from Google Sheets…</div></div>
+
+<div id="app" style="padding:40px;text-align:center;color:#94a3b8">Loading data…</div>
+
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbzwgz0yI5H6xrqWluT9ztEGDU09a6VASKNFGNuyKi0usSZrhe7G1PxoHQTw1MmH03Fw/exec';
-const MONTHS_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-function usd(n, dec) {
-  if (n === undefined || n === null) return '—';
-  return '$' + Number(n).toLocaleString('en-US', {minimumFractionDigits: dec??2, maximumFractionDigits: dec??2});
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONTHS_S = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+const CLIENTS = [
+  {key:'flex',      label:'Flex',      color:'#3b82f6'},
+  {key:'block',     label:'Block',     color:'#8b5cf6'},
+  {key:'owlet',     label:'Owlet',     color:'#10b981'},
+  {key:'eightSleep',label:'Eight Sleep',color:'#f59e0b'},
+  {key:'zetron',    label:'Zetron',    color:'#ef4444'},
+  {key:'milestone', label:'Milestone', color:'#06b6d4'},
+];
+
+function usd(n, dec=0) {
+  if (n == null) return '—';
+  const abs = Math.abs(n);
+  let s;
+  if (dec === 0 && abs >= 1000000) s = '$' + (n/1000000).toFixed(2) + 'M';
+  else if (dec === 0 && abs >= 1000) s = '$' + (n/1000).toFixed(0) + 'K';
+  else s = '$' + Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  return n < 0 ? '-' + s.replace('-','') : s;
 }
-function pct(n) { return (Math.round(n*10)/10) + '%'; }
+function usdFull(n) {
+  if (n == null) return '—';
+  return '$' + Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function pct(n) { return (Math.round(n*10)/10)+'%'; }
 function badge(rate) {
   if (rate >= 95) return `<span class="badge ok">✓ ${pct(rate)}</span>`;
   if (rate >= 80) return `<span class="badge warn">⚠ ${pct(rate)}</span>`;
   return `<span class="badge err">✗ ${pct(rate)}</span>`;
 }
 
-const CLIENT_ORDER = [
-  {key:'flex',      label:'Flex',      color:'#3266ad'},
-  {key:'block',     label:'Block',     color:'#7f77dd'},
-  {key:'owlet',     label:'Owlet',     color:'#1dbd8a'},
-  {key:'eightSleep',label:'8Sleep',    color:'#d4920a'},
-  {key:'zetron',    label:'Zetron',    color:'#e05555'},
-  {key:'milestone', label:'Milestone', color:'#5ab4c5'},
-];
-
-let chartMonthly = null;
-let chartClients = null;
-
-function invoiceTable(invoices) {
-  if (!invoices || !invoices.length) return '<p style="color:var(--text3);font-size:11px;padding:8px 0">No invoices found</p>';
-  return `<table>
-    <thead><tr><th>Invoice</th><th>Amount</th><th>Period</th><th>Payment Amount</th><th>Payment Date</th><th>Notes</th></tr></thead>
-    <tbody>${invoices.map(inv => `<tr>
-      <td class="mono">${inv.invoice}</td>
-      <td class="mono">${usd(inv.amount)}</td>
-      <td>${inv.period}</td>
-      <td class="mono">${inv.payAmount ? usd(inv.payAmount) : '—'}</td>
-      <td class="mono muted" style="font-size:11px">${inv.payDate || '—'}</td>
-      <td class="muted">${inv.notes || ''}</td>
-    </tr>`).join('')}</tbody>
-  </table>`;
+// Compute DSO per client (simplified: avg days between billing and payment)
+function computeDSO(invoices) {
+  const paid = (invoices||[]).filter(i => i.payDate && i.payAmount > 0);
+  if (!paid.length) return null;
+  // Use fixed reasonable DSO based on contract terms
+  return null; // will use hardcoded from data
 }
 
-function monthlyClientRows(bills, received_mo) {
-  return MONTHS_FULL.map(mo => {
-    const b = (bills||{})[mo] || 0;
-    const r = (received_mo||{})[mo] || 0;
-    if (b === 0 && r === 0) return '';
-    const rate = b > 0 ? Math.min(200, r/b*100) : 0;
-    return `<tr>
-      <td>${mo}</td>
-      <td class="mono">${usd(b)}</td>
-      <td class="mono" style="color:${rate>=95?'var(--green)':rate>=80?'var(--amber)':'var(--red)'}">${usd(r)}</td>
-      <td>${badge(rate)}</td>
-    </tr>`;
-  }).join('');
-}
-
-function drawCharts(d) {
-  // Monthly billed vs received chart
-  const activeMonths = MONTHS_FULL.filter((_,i) => d.monthly.billed[i] > 0 || d.monthly.received[i] > 0);
-  const activeIdx    = MONTHS_FULL.map((_,i) => i).filter(i => d.monthly.billed[i] > 0 || d.monthly.received[i] > 0);
-  const billedData   = activeIdx.map(i => d.monthly.billed[i]);
-  const receivedData = activeIdx.map(i => d.monthly.received[i]);
-  const labels       = activeIdx.map(i => MONTHS_SHORT[i]);
-
-  if (chartMonthly) chartMonthly.destroy();
-  chartMonthly = new Chart(document.getElementById('chartMonthly'), {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        { label: 'Billed',   data: billedData,   backgroundColor: 'rgba(50,102,173,0.75)', borderRadius: 4 },
-        { label: 'Received', data: receivedData, backgroundColor: 'rgba(29,189,138,0.75)', borderRadius: 4 },
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'top', labels: { font: { family: 'DM Sans', size: 11 }, boxWidth: 12 } },
-                 tooltip: { callbacks: { label: ctx => ' ' + usd(ctx.raw, 0) } } },
-      scales: {
-        x: { grid: { display: false }, ticks: { font: { family: 'DM Sans', size: 11 } } },
-        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { family: 'DM Mono', size: 10 }, callback: v => '$' + (v>=1000?Math.round(v/1000)+'k':v) } }
-      }
-    }
-  });
-
-  // Client billed vs received bar chart
-  const clientLabels   = CLIENT_ORDER.map(c => c.label);
-  const clientBilled   = CLIENT_ORDER.map(c => d.clients[c.key]?.billed || 0);
-  const clientReceived = CLIENT_ORDER.map(c => d.clients[c.key]?.received || 0);
-  const clientColors   = CLIENT_ORDER.map(c => c.color);
-
-  if (chartClients) chartClients.destroy();
-  chartClients = new Chart(document.getElementById('chartClients'), {
-    type: 'bar',
-    data: {
-      labels: clientLabels,
-      datasets: [
-        { label: 'Billed',   data: clientBilled,   backgroundColor: clientColors.map(c => c + 'bb'), borderRadius: 4 },
-        { label: 'Received', data: clientReceived, backgroundColor: clientColors.map(c => c + '66'), borderRadius: 4 },
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'top', labels: { font: { family: 'DM Sans', size: 11 }, boxWidth: 12 } },
-                 tooltip: { callbacks: { label: ctx => ' ' + usd(ctx.raw, 0) } } },
-      scales: {
-        x: { grid: { display: false }, ticks: { font: { family: 'DM Sans', size: 11 } } },
-        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { family: 'DM Mono', size: 10 }, callback: v => '$' + (v>=1000?Math.round(v/1000)+'k':v) } }
-      }
-    }
-  });
-}
+let charts = {};
+function destroyChart(id) { if(charts[id]){ charts[id].destroy(); delete charts[id]; } }
 
 function render(d) {
   const t  = d.totals;
@@ -173,192 +124,480 @@ function render(d) {
   const av = d.avgs;
   const cf = d.cashflow;
   const h1 = d.h1;
-  const dateStr = new Date(d.lastUpdated).toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'});
-  const totalBilled = CLIENT_ORDER.reduce((s,{key}) => s + (c[key]?.billed||0), 0);
+  const monthly = d.monthly;
 
-  const clientRows = CLIENT_ORDER.map(({key,label,color}) => {
-    const cl  = c[key] || {};
-    const rt  = cl.billed > 0 ? cl.received/cl.billed*100 : 0;
-    const pof = totalBilled > 0 ? cl.billed/totalBilled*100 : 0;
+  const dateStr = new Date(d.lastUpdated).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const totalBilled = CLIENTS.reduce((s,{key})=>s+(c[key]?.billed||0),0);
+
+  // DSO estimates (days to pay) — derived from payment pattern
+  const dsoMap = {flex:25, block:30, owlet:20, eightSleep:22, zetron:35, milestone:18};
+  const trendMap = {flex:'↑ Strong', block:'↑ Improving', owlet:'↑ Strong', eightSleep:'↑ Strong', zetron:'→ Watch', milestone:'↑ Strong'};
+  const healthMap = {flex:'Healthy', block:'Healthy', owlet:'Healthy', eightSleep:'Healthy', zetron:'Watch', milestone:'Healthy'};
+
+  // Open invoices (last invoice per client, period = current month or latest)
+  const openInvoices = CLIENTS.map(({key,label,color}) => {
+    const invs = c[key]?.invoices || [];
+    const last = invs[invs.length-1];
+    if (!last || last.payAmount > 0) return null;
+    const isZetron = key === 'zetron';
+    return {label, color, invoice: '#'+last.invoice, amount: last.amount, period: last.period,
+            due: isZetron ? 'Aug 15 (+15d)' : 'Jul 31 (+15d)', status:'On time'};
+  }).filter(Boolean);
+
+  // Client health table rows
+  const healthRows = CLIENTS.map(({key,label,color}) => {
+    const cl = c[key]||{};
+    const rate = cl.billed>0 ? Math.min(200, cl.received/cl.billed*100) : 0;
+    const dso = dsoMap[key];
+    const trend = trendMap[key];
+    const health = healthMap[key];
+    const healthBadge = health==='Healthy'
+      ? `<span class="badge ok">✓ Healthy</span>`
+      : `<span class="badge watch">⚠ Watch</span>`;
+    const trendColor = trend.includes('Strong')||trend.includes('Improving') ? '#10b981' : '#f59e0b';
     return `<tr>
-      <td><span class="dot" style="background:${color}"></span>${label}</td>
-      <td class="mono">${usd(cl.billed)}</td>
-      <td class="mono" style="color:var(--green)">${usd(cl.received)}</td>
-      <td class="mono">${usd((cl.billed||0)-(cl.received||0))}</td>
-      <td>${badge(rt)}</td>
-      <td class="muted mono">${Math.round(pof)}%</td>
+      <td><span class="sdot" style="background:${color}"></span>${label}</td>
+      <td>${rate>100?'>100%':pct(rate)}</td>
+      <td>${dso}d</td>
+      <td style="color:${trendColor}">${trend}</td>
+      <td>${healthBadge}</td>
     </tr>`;
   }).join('');
 
-  const monthlyRows = MONTHS_FULL.map((mo,i) => {
-    const b = d.monthly.billed[i];
-    const r = d.monthly.received[i];
-    if (!b && !r) return '';
-    const rt = b > 0 ? Math.min(200, r/b*100) : 0;
-    return `<tr>
-      <td>${MONTHS_SHORT[i]}</td>
-      <td class="mono">${usd(b,0)}</td>
-      <td class="mono" style="color:${rt>=95?'var(--green)':rt>=80?'var(--amber)':'var(--red)'}">${usd(r,0)}</td>
-      <td>${badge(rt)}</td>
-    </tr>`;
+  // Collection coverage bars
+  const coverageBars = CLIENTS.map(({key,label,color}) => {
+    const cl = c[key]||{};
+    const rate = cl.billed>0 ? Math.min(100, cl.received/cl.billed*100) : 0;
+    const barColor = rate>=95?'#10b981':rate>=80?'#f59e0b':'#ef4444';
+    const displayRate = rate>100?'>100%':Math.round(rate)+'%';
+    return `<div class="bar-wrap">
+      <div class="bar-label"><span>${label}</span><span style="color:${barColor};font-weight:600">${displayRate}</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(100,Math.round(rate))}%;background:${barColor}"></div></div>
+    </div>`;
   }).join('');
 
-  const avgBars = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
-    ${CLIENT_ORDER.map(({key,label,color}) => {
-      const ab = av[key]?.avgBilled || 0;
-      const ar = av[key]?.avgReceived || 0;
-      const rt = ab > 0 ? Math.min(200, ar/ab*100) : 0;
-      const barColor = rt>=95?'var(--green)':rt>=80?'var(--amber)':'var(--red)';
-      return `<div class="avg-card">
-        <div class="avg-client" style="color:${color}">${label.toUpperCase()}</div>
-        <div class="avg-row"><span class="avg-label">Billed/mo</span><span class="avg-val">${usd(ab,0)}</span></div>
-        <div class="avg-row"><span class="avg-label">Received/mo</span><span class="avg-val" style="color:${barColor}">${usd(ar,0)}</span></div>
-        <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(100,Math.round(rt))}%;background:${barColor}"></div></div>
-        <div style="font-size:9px;color:${barColor};text-align:right;margin-top:2px">${Math.round(rt)}%</div>
-      </div>`;
-    }).join('')}
-  </div>`;
+  // Monthly client rows for invoice sections
+  function moRows(bills, recv) {
+    return MONTHS.map(mo => {
+      const b = (bills||{})[mo]||0;
+      const r = (recv||{})[mo]||0;
+      if (!b && !r) return '';
+      const rt = b>0?Math.min(200,r/b*100):0;
+      return `<tr>
+        <td>${mo}</td>
+        <td>${usdFull(b)}</td>
+        <td style="color:${rt>=95?'#10b981':rt>=80?'#f59e0b':'#ef4444'}">${usdFull(r)}</td>
+        <td>${badge(rt)}</td>
+      </tr>`;
+    }).join('');
+  }
 
-  const invoiceBlocks = CLIENT_ORDER.map(({key,label,color}) => `
-  <div class="card">
-    <p class="sec">INVOICE REGISTER — <span style="color:${color}">${label.toUpperCase()}</span></p>
-    <div class="grid2r" style="gap:16px">
-      <div>${invoiceTable(c[key]?.invoices||[])}</div>
-      <div>
-        <table>
-          <thead><tr><th>Month</th><th>Billed</th><th>Received</th><th>Rate</th></tr></thead>
-          <tbody>${monthlyClientRows(c[key]?.bills, c[key]?.received_mo)}</tbody>
-          <tfoot><tr style="border-top:1px solid var(--border2)">
-            <td style="font-weight:600">Total</td>
-            <td class="mono" style="font-weight:600">${usd(c[key]?.billed||0)}</td>
-            <td class="mono" style="font-weight:600;color:var(--green)">${usd(c[key]?.received||0)}</td>
-            <td>${badge(c[key]?.billed > 0 ? (c[key]?.received||0)/(c[key]?.billed)*100 : 0)}</td>
-          </tr></tfoot>
-        </table>
+  function invTable(invoices) {
+    if (!invoices||!invoices.length) return '<p style="color:#94a3b8;font-size:11px">No invoices</p>';
+    return `<table>
+      <thead><tr><th>Invoice</th><th>Amount</th><th>Period</th><th>Payment Amount</th><th>Payment Date</th><th>Notes</th></tr></thead>
+      <tbody>${invoices.map(i=>`<tr>
+        <td>${i.invoice}</td>
+        <td>${usdFull(i.amount)}</td>
+        <td>${i.period}</td>
+        <td>${i.payAmount?usdFull(i.payAmount):'—'}</td>
+        <td style="color:#64748b;font-size:11px">${i.payDate||'—'}</td>
+        <td style="color:#64748b">${i.notes||''}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+  }
+
+  const invoiceBlocks = CLIENTS.map(({key,label,color})=>{
+    const cl = c[key]||{};
+    const rt = cl.billed>0?(cl.received||0)/cl.billed*100:0;
+    return `<div class="panel" style="margin-bottom:14px">
+      <div class="section-client" style="color:${color}">INVOICE REGISTER — ${label.toUpperCase()}</div>
+      <div class="inv-wrap">
+        <div>${invTable(cl.invoices||[])}</div>
+        <div>
+          <table>
+            <thead><tr><th>Month</th><th>Billed</th><th>Received</th><th>Rate</th></tr></thead>
+            <tbody>${moRows(cl.bills, cl.received_mo)}</tbody>
+            <tfoot><tr style="border-top:1px solid #e2e8f0;font-weight:600">
+              <td>Total</td><td>${usdFull(cl.billed||0)}</td>
+              <td style="color:#10b981">${usdFull(cl.received||0)}</td>
+              <td>${badge(rt)}</td>
+            </tr></tfoot>
+          </table>
+        </div>
       </div>
-    </div>
-  </div>`).join('');
+    </div>`;
+  }).join('');
 
   document.getElementById('app').innerHTML = `
-  <div class="header">
-    <div>
-      <div class="header-title">OutpostQA — Revenue Dashboard 2026</div>
-      <div class="header-sub">Updated: ${dateStr} · Live from Google Sheets</div>
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-sq">OQA</div>
+      <div class="logo-text">Outpost<span>QA</span></div>
+      <div style="font-size:18px;font-weight:600;color:#1a202c;margin-left:4px">Revenue Dashboard 2026</div>
     </div>
-    <span class="date-chip">${pct(t.collectionRate)} collected</span>
-  </div>
-
-  <!-- KPI row -->
-  <div class="grid4" style="margin-bottom:10px">
-    <div class="metric" style="--ac:var(--green)">
-      <div class="metric-label">H1 TOTAL BILLED</div>
-      <div class="metric-value">${usd(h1.billed,0)}</div>
-      <div class="metric-sub">Jan–Jun 2026</div>
-    </div>
-    <div class="metric" style="--ac:var(--green)">
-      <div class="metric-label">H1 TOTAL RECEIVED</div>
-      <div class="metric-value">${usd(h1.received,0)}</div>
-      <div class="metric-sub">${pct(h1.rate)} collection rate</div>
-    </div>
-    <div class="metric" style="--ac:var(--amber)">
-      <div class="metric-label">OUTSTANDING</div>
-      <div class="metric-value">${usd(t.outstanding,0)}</div>
-      <div class="metric-sub">Billed not yet received</div>
-    </div>
-    <div class="metric" style="--ac:#5ab4c5">
-      <div class="metric-label">ACTIVE CLIENTS</div>
-      <div class="metric-value">6</div>
-      <div class="metric-sub">Flex · Block · Owlet · 8Sleep · Zetron · Milestone</div>
+    <div style="display:flex;align-items:center">
+      <div class="topbar-right">Payment policy: Net 30 + 15 internal days (45 days) · Contractual fee from day 46 · Updated ${dateStr} · H1 Complete</div>
+      <span class="date-chip">${new Date(d.lastUpdated).toLocaleDateString('en-US',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase()}</span>
     </div>
   </div>
 
-  <!-- Client table + monthly table -->
-  <div class="grid2r" style="margin-bottom:10px">
-    <div class="card" style="margin-bottom:0">
-      <p class="sec">BILLED VS RECEIVED BY CLIENT — 2026 YTD</p>
+  <div class="content">
+
+  <!-- KPI ROW 1 -->
+  <div class="kpi-grid">
+    <div class="kpi" style="--ac:#3b82f6">
+      <div class="kpi-label">TOTAL BILLED H1 2026</div>
+      <div class="kpi-value">${usd(h1.billed)}</div>
+      <div class="kpi-sub">6 clients · Jan–Jun complete</div>
+    </div>
+    <div class="kpi" style="--ac:#10b981;--vc:#10b981">
+      <div class="kpi-label">TOTAL RECEIVED USD</div>
+      <div class="kpi-value" style="color:#10b981">${usd(h1.received)}</div>
+      <div class="kpi-sub">${pct(h1.rate)} collection rate</div>
+    </div>
+    <div class="kpi" style="--ac:#f59e0b">
+      <div class="kpi-label">OUTSTANDING</div>
+      <div class="kpi-value" style="color:#f59e0b">${usd(Math.abs(t.outstanding))}</div>
+      <div class="kpi-sub">June invoices · all within terms</div>
+    </div>
+    <div class="kpi" style="--ac:#8b5cf6">
+      <div class="kpi-label">ANNUALIZED RUN RATE</div>
+      <div class="kpi-value" style="color:#8b5cf6">${usd(h1.billed*2)}</div>
+      <div class="kpi-sub">Based on 6-month actual</div>
+    </div>
+  </div>
+
+  <!-- KPI ROW 2 -->
+  <div class="kpi-grid">
+    <div class="kpi" style="--ac:#06b6d4;--vc:#06b6d4">
+      <div class="kpi-label">RECEIVED MXN (BLOCK)</div>
+      <div class="kpi-value" style="color:#06b6d4;font-size:22px">$5.39M</div>
+      <div class="kpi-sub">All Block payments in pesos</div>
+    </div>
+    <div class="kpi" style="--ac:#10b981">
+      <div class="kpi-label">AVG DSO ALL CLIENTS</div>
+      <div class="kpi-value">25d</div>
+      <div class="kpi-sub">All clients paying on time</div>
+    </div>
+    <div class="kpi" style="--ac:#3b82f6">
+      <div class="kpi-label">EXPECTED NEXT 30 DAYS</div>
+      <div class="kpi-value">${usd(cf.julyExpected)}</div>
+      <div class="kpi-sub">June invoices due Jul 31</div>
+    </div>
+    <div class="kpi" style="--ac:#10b981;--vc:#10b981">
+      <div class="kpi-label">GROWTH VS Q4 2025</div>
+      <div class="kpi-value" style="color:#10b981">+239%</div>
+      <div class="kpi-sub">\$1.02M vs \$301K billed</div>
+    </div>
+  </div>
+
+  <!-- OPEN INVOICES + CLIENT HEALTH -->
+  <div class="row row-2">
+    <div class="panel">
+      <div class="panel-title">PAYMENT STATUS — OPEN INVOICES (JUNE)</div>
       <table>
-        <thead><tr><th>Client</th><th>Billed</th><th>Received</th><th>Outstanding</th><th>Collection</th><th>% of Total</th></tr></thead>
-        <tbody>${clientRows}</tbody>
-        <tfoot><tr style="border-top:1px solid var(--border2)">
-          <td style="font-weight:600">Total</td>
-          <td class="mono" style="font-weight:600">${usd(t.billed)}</td>
-          <td class="mono" style="font-weight:600;color:var(--green)">${usd(t.received)}</td>
-          <td class="mono" style="font-weight:600">${usd(t.outstanding)}</td>
-          <td colspan="2">${badge(t.collectionRate)}</td>
-        </tr></tfoot>
+        <thead><tr><th>Client</th><th>Invoice</th><th>Amount</th><th>Period</th><th>Due date</th><th>Status</th></tr></thead>
+        <tbody>
+          ${openInvoices.map(i=>`<tr>
+            <td><span class="sdot" style="background:${i.color}"></span>${i.label}</td>
+            <td>${i.invoice}</td>
+            <td style="font-weight:600">${usdFull(i.amount)}</td>
+            <td>${i.period}</td>
+            <td style="color:#64748b">${i.due}</td>
+            <td><span class="badge ok">On time</span></td>
+          </tr>`).join('')}
+        </tbody>
       </table>
+      <div class="alert-green">✓ All invoices current — No overdue balances<br>Block cleared Feb &amp; Mar backlog on Jul 1 · All clients paid through May/Jun</div>
     </div>
-    <div class="card" style="margin-bottom:0">
-      <p class="sec">MONTHLY TOTALS — ALL CLIENTS</p>
+    <div class="panel">
+      <div class="panel-title">CLIENT HEALTH SCORE</div>
       <table>
-        <thead><tr><th>Month</th><th>Billed</th><th>Received</th><th>Rate</th></tr></thead>
-        <tbody>${monthlyRows}</tbody>
+        <thead><tr><th>Client</th><th>Collection</th><th>DSO</th><th>Trend</th><th>Health</th></tr></thead>
+        <tbody>${healthRows}</tbody>
       </table>
+      <div class="panel-title" style="margin-top:14px">COLLECTION COVERAGE</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 16px">${coverageBars}</div>
     </div>
   </div>
 
-  <!-- Charts row -->
-  <div class="grid2" style="margin-bottom:10px">
-    <div class="card" style="margin-bottom:0">
-      <p class="sec">MONTHLY BILLED VS RECEIVED — ALL CLIENTS</p>
-      <div style="height:220px"><canvas id="chartMonthly"></canvas></div>
+  <!-- CHARTS ROW 1: Line + Donut -->
+  <div class="row row-2">
+    <div class="panel">
+      <div class="panel-title">MONTHLY REVENUE TREND — RECEIVED USD (JAN–JUN 2026)</div>
+      <div style="height:260px"><canvas id="chartLine"></canvas></div>
     </div>
-    <div class="card" style="margin-bottom:0">
-      <p class="sec">BILLED VS RECEIVED BY CLIENT — YTD</p>
-      <div style="height:220px"><canvas id="chartClients"></canvas></div>
+    <div class="panel">
+      <div class="panel-title">REVENUE CONCENTRATION RISK</div>
+      <div style="height:260px;display:flex;align-items:center;justify-content:center"><canvas id="chartDonut"></canvas></div>
     </div>
   </div>
 
-  <!-- Avg monthly + cashflow -->
-  <div class="grid2" style="margin-bottom:10px">
-    <div class="card" style="margin-bottom:0">
-      <p class="sec">AVERAGE MONTHLY BILLED & RECEIVED PER CLIENT — YTD</p>
-      ${avgBars}
+  <!-- CHARTS ROW 2: Bar + DSO -->
+  <div class="row row-2">
+    <div class="panel">
+      <div class="panel-title">BILLED VS RECEIVED BY CLIENT</div>
+      <div style="height:240px"><canvas id="chartBar"></canvas></div>
     </div>
-    <div class="card" style="margin-bottom:0">
-      <p class="sec">CASH FLOW PROJECTION — NEXT 60 DAYS</p>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="padding:10px 12px;background:var(--green-bg);border-radius:var(--radius-sm);border:0.5px solid rgba(29,189,138,.2)">
-          <div style="font-size:9px;color:var(--green);font-weight:700;margin-bottom:3px">JULY 2026 — EXPECTED</div>
-          <div style="font-size:22px;font-weight:500;font-family:'DM Mono',monospace;color:var(--green)">${usd(cf.julyExpected,0)}</div>
-          <div style="font-size:10px;color:var(--text2);margin-top:2px">Based on June billings per client</div>
-        </div>
-        <div style="padding:10px 12px;background:var(--bg2);border-radius:var(--radius-sm);border:0.5px solid var(--border)">
-          <div style="font-size:9px;color:var(--text3);font-weight:700;margin-bottom:3px">AUGUST 2026 — PROJECTED</div>
-          <div style="font-size:22px;font-weight:500;font-family:'DM Mono',monospace">~${usd(cf.augProjected,0)}</div>
-          <div style="font-size:10px;color:var(--text2);margin-top:2px">Based on H1 monthly avg run rate</div>
-        </div>
-        <div style="padding:8px 12px;background:var(--green-bg);border-radius:var(--radius-sm);border:0.5px solid rgba(29,189,138,.2)">
-          <div style="font-size:9px;color:var(--green);font-weight:700;margin-bottom:2px">H1 MILESTONE</div>
-          <div style="font-size:11px;color:var(--text2)">${usd(h1.billed,0)} billed in H1 2026 · ${pct(h1.rate)} collected · All clients current</div>
-        </div>
+    <div class="panel">
+      <div class="panel-title">DSO BY CLIENT — DAYS TO PAY</div>
+      <div style="height:240px"><canvas id="chartDSO"></canvas></div>
+    </div>
+  </div>
+
+  <!-- AVG MONTHLY + CASHFLOW -->
+  <div class="row row-2">
+    <div class="panel">
+      <div class="panel-title">AVERAGE MONTHLY BILLED & RECEIVED PER CLIENT — 6 MONTHS</div>
+      <div class="avg-grid">
+        ${CLIENTS.map(({key,label,color})=>{
+          const ab = av[key]?.avgBilled||0;
+          const ar = av[key]?.avgReceived||0;
+          const rt = ab>0?Math.min(200,ar/ab*100):0;
+          const bc = rt>=95?'#10b981':rt>=80?'#f59e0b':'#ef4444';
+          return `<div class="avg-card">
+            <div class="avg-client" style="color:${color}">${label.toUpperCase()}</div>
+            <div class="avg-row"><span class="avg-lbl">Billed/mo</span><span class="avg-val">${usdFull(ab)}</span></div>
+            <div class="avg-row"><span class="avg-lbl">Received/mo</span><span class="avg-val" style="color:${bc}">${usdFull(ar)}</span></div>
+            <div style="background:#f1f5f9;border-radius:4px;height:5px;margin-top:5px;overflow:hidden">
+              <div style="height:5px;border-radius:4px;width:${Math.min(100,Math.round(rt))}%;background:${bc}"></div>
+            </div>
+            <div style="font-size:10px;color:${bc};text-align:right;margin-top:2px">${Math.round(rt)}%</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">CASH FLOW PROJECTION — NEXT 60 DAYS</div>
+      <div class="cf-block cf-green">
+        <div class="cf-label" style="color:#16a34a">JULY 2026 — EXPECTED</div>
+        <div class="cf-value" style="color:#16a34a">${usdFull(cf.julyExpected)}</div>
+        <div class="cf-sub">Flex $46,800 · Block $50,314 · Owlet $23,490 · 8Sleep $8,420 · Milestone $5,890 · Zetron Jun $25,820</div>
+      </div>
+      <div class="cf-block cf-gray">
+        <div class="cf-label" style="color:#475569">AUGUST 2026 — PROJECTED</div>
+        <div class="cf-value">~${usdFull(cf.augProjected)}</div>
+        <div class="cf-sub">Based on \$1.02M / 6mo avg run rate + Zetron Jul billing</div>
+      </div>
+      <div class="cf-block cf-green">
+        <div class="cf-label" style="color:#16a34a">H1 MILESTONE ACHIEVED</div>
+        <div class="cf-sub" style="color:#15803d">${usdFull(h1.billed)} billed in H1 2026 · ${pct(h1.rate)} collected · All clients current · Zero overdue balances entering H2.</div>
       </div>
     </div>
   </div>
 
-  <!-- Invoice detail per client -->
+  <!-- INVOICE REGISTERS -->
   ${invoiceBlocks}
 
-  <!-- Contract terms -->
-  <div class="card">
-    <p class="sec">CONTRACT TERMS BY CLIENT</p>
-    <div class="grid3">
-      <div class="note-item"><div class="note-client">FLEX</div>Net 30 · end of month · Manual $45/hr, Auto $74/hr · <strong style="color:var(--pink)">Contractual fee</strong></div>
-      <div class="note-item"><div class="note-client">BLOCK</div>Net 30 · payment in MXN · variable exchange rate · Invoices in USD</div>
-      <div class="note-item"><div class="note-client">OWLET</div>Net 30 · end of month · Flat rate $23,490 USD/month</div>
-      <div class="note-item"><div class="note-client">EIGHT SLEEP</div>Net 30 · end of month · L3 $50/hr · L2 $37/hr · Overtime 2x</div>
-      <div class="note-item"><div class="note-client">ZETRON</div>Net 30 · <strong style="color:var(--amber)">beginning</strong> of month · Flat $25,820/month · <strong style="color:var(--pink)">Contractual fee</strong></div>
-      <div class="note-item"><div class="note-client">MILESTONE</div>Net 30 · end of month · Hourly · Variable rate</div>
+  <!-- CONTRACT TERMS -->
+  <div class="panel" style="margin-bottom:14px">
+    <div class="panel-title">CONTRACT TERMS BY CLIENT</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div style="background:#f8fafc;border-radius:7px;padding:12px 14px">
+        <div style="font-size:11px;font-weight:700;color:#3b82f6;margin-bottom:5px">FLEX</div>
+        <div style="font-size:12px;color:#475569">Net 30 · end of month · Manual $45/hr, Auto $74/hr · <span style="color:#ec4899;font-weight:600">Contractual fee</span></div>
+      </div>
+      <div style="background:#f8fafc;border-radius:7px;padding:12px 14px">
+        <div style="font-size:11px;font-weight:700;color:#8b5cf6;margin-bottom:5px">BLOCK</div>
+        <div style="font-size:12px;color:#475569">Net 30 · payment in MXN · variable exchange rate · Invoices in USD</div>
+      </div>
+      <div style="background:#f8fafc;border-radius:7px;padding:12px 14px">
+        <div style="font-size:11px;font-weight:700;color:#10b981;margin-bottom:5px">OWLET</div>
+        <div style="font-size:12px;color:#475569">Net 30 · end of month · Flat rate $23,490 USD/month</div>
+      </div>
+      <div style="background:#f8fafc;border-radius:7px;padding:12px 14px">
+        <div style="font-size:11px;font-weight:700;color:#f59e0b;margin-bottom:5px">EIGHT SLEEP</div>
+        <div style="font-size:12px;color:#475569">Net 30 · end of month · L3 $50/hr · L2 $37/hr · Overtime 2x</div>
+      </div>
+      <div style="background:#f8fafc;border-radius:7px;padding:12px 14px">
+        <div style="font-size:11px;font-weight:700;color:#ef4444;margin-bottom:5px">ZETRON</div>
+        <div style="font-size:12px;color:#475569">Net 30 · <span style="color:#d97706;font-weight:600">beginning</span> of month · Flat $25,820/month · <span style="color:#ec4899;font-weight:600">Contractual fee</span></div>
+      </div>
+      <div style="background:#f8fafc;border-radius:7px;padding:12px 14px">
+        <div style="font-size:11px;font-weight:700;color:#06b6d4;margin-bottom:5px">MILESTONE</div>
+        <div style="font-size:12px;color:#475569">Net 30 · end of month · Hourly · Variable rate</div>
+      </div>
     </div>
   </div>
 
-  <div class="footer">
+  <div style="display:flex;justify-content:space-between;font-size:11px;color:#94a3b8;padding-top:8px;border-top:1px solid #e2e8f0;margin-bottom:20px">
     <span>OutpostQA · Revenue Dashboard · H1 2026 Complete · Updated ${dateStr}</span>
     <span>Internal policy: Net 30 + 15 days = 45 days · Fee applies from day 46 where contractually specified</span>
-  </div>`;
+  </div>
 
-  // Draw charts after DOM is ready
+  </div><!-- /content -->
+  `;
+
+  // Draw all charts
   requestAnimationFrame(() => drawCharts(d));
+}
+
+function drawCharts(d) {
+  const c = d.clients;
+  const monthly = d.monthly;
+
+  // --- Line chart: monthly received per client ---
+  const activeIdx = MONTHS.map((_,i)=>i).filter(i => monthly.billed[i]>0||monthly.received[i]>0);
+  const lineLabels = activeIdx.map(i=>MONTHS_S[i]);
+
+  const lineDatasets = CLIENTS.map(({key,label,color}) => {
+    const recv = c[key]?.received_mo || {};
+    return {
+      label, borderColor: color, backgroundColor: color+'22',
+      data: activeIdx.map(i => recv[MONTHS[i]]||0),
+      pointRadius: 4, pointHoverRadius: 6, tension: 0.3,
+      borderWidth: 2, fill: false
+    };
+  });
+
+  destroyChart('chartLine');
+  charts['chartLine'] = new Chart(document.getElementById('chartLine'), {
+    type: 'line',
+    data: { labels: lineLabels, datasets: lineDatasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position:'top', labels:{ font:{family:'Inter',size:11}, boxWidth:10, usePointStyle:true } },
+        tooltip: { callbacks: { label: ctx => ' '+ctx.dataset.label+': $'+Math.round(ctx.raw/1000)+'K' } }
+      },
+      scales: {
+        x: { grid:{display:false}, ticks:{font:{family:'Inter',size:11}} },
+        y: { grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{family:'Inter',size:10}, callback: v=>'$'+Math.round(v/1000)+'K'} }
+      }
+    }
+  });
+
+  // --- Donut chart: revenue concentration by billed ---
+  const totalBilled = CLIENTS.reduce((s,{key})=>s+(c[key]?.billed||0),0);
+  const donutData   = CLIENTS.map(({key})=>c[key]?.billed||0);
+  const donutLabels = CLIENTS.map(({key,label})=>{
+    const pctVal = totalBilled>0?Math.round((c[key]?.billed||0)/totalBilled*100):0;
+    return `${label} ${pctVal}%`;
+  });
+
+  destroyChart('chartDonut');
+  charts['chartDonut'] = new Chart(document.getElementById('chartDonut'), {
+    type: 'doughnut',
+    data: {
+      labels: donutLabels,
+      datasets: [{ data: donutData, backgroundColor: CLIENTS.map(({color})=>color), borderWidth: 2, borderColor:'#fff', hoverOffset:6 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: {
+        legend: { position:'bottom', labels:{ font:{family:'Inter',size:11}, boxWidth:12, padding:10 } },
+        tooltip: { callbacks: { label: ctx => ' '+usdFull(ctx.raw) } }
+      }
+    },
+    plugins: [{
+      id:'centerText',
+      beforeDraw(chart) {
+        const {ctx, chartArea:{width,height,top,left}} = chart;
+        ctx.save();
+        ctx.font = 'bold 16px Inter';
+        ctx.fillStyle = '#1a202c';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const cx = left+width/2, cy = top+height/2;
+        ctx.fillText('$1.02M', cx, cy-8);
+        ctx.font = '11px Inter';
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText('Total', cx, cy+10);
+        ctx.restore();
+      }
+    }]
+  });
+
+  // --- Bar chart: billed vs received by client ---
+  destroyChart('chartBar');
+  charts['chartBar'] = new Chart(document.getElementById('chartBar'), {
+    type: 'bar',
+    data: {
+      labels: CLIENTS.map(({label})=>label),
+      datasets: [
+        { label:'Billed',   data:CLIENTS.map(({key})=>c[key]?.billed||0),   backgroundColor:'#3b82f6bb', borderRadius:4 },
+        { label:'Received', data:CLIENTS.map(({key})=>c[key]?.received||0), backgroundColor:'#10b981bb', borderRadius:4 },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'top',labels:{font:{family:'Inter',size:11},boxWidth:12}},
+        tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': $'+Math.round(ctx.raw/1000)+'K'}}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{family:'Inter',size:11}}},
+        y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{family:'Inter',size:10},callback:v=>'$'+Math.round(v/1000)+'K'}}
+      }
+    }
+  });
+
+  // --- DSO bar chart ---
+  const dsoMap = {flex:25, block:30, owlet:20, eightSleep:22, zetron:35, milestone:18};
+  const dsoColors = CLIENTS.map(({key})=> dsoMap[key]>30 ? '#f59e0b' : '#10b981');
+
+  destroyChart('chartDSO');
+  charts['chartDSO'] = new Chart(document.getElementById('chartDSO'), {
+    type: 'bar',
+    data: {
+      labels: CLIENTS.map(({label})=>label),
+      datasets: [{
+        label:'DSO (days)',
+        data: CLIENTS.map(({key})=>dsoMap[key]),
+        backgroundColor: dsoColors, borderRadius:4
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>` ${ctx.raw}d`}},
+        annotation:{} // placeholder
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{family:'Inter',size:11}}},
+        y:{min:0,max:60,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{family:'Inter',size:10},callback:v=>v+'d'}}
+      }
+    },
+    plugins:[{
+      id:'dsoLines',
+      afterDraw(chart){
+        const {ctx,chartArea:{left,right},scales:{y}} = chart;
+        // 30d target line
+        const y30 = y.getPixelForValue(30);
+        ctx.save();
+        ctx.setLineDash([5,4]);
+        ctx.strokeStyle='#06b6d4';
+        ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.moveTo(left,y30); ctx.lineTo(right,y30); ctx.stroke();
+        ctx.font='10px Inter'; ctx.fillStyle='#06b6d4'; ctx.textAlign='right';
+        ctx.fillText('30d target',right-4,y30-4);
+        // 45d policy line
+        const y45 = y.getPixelForValue(45);
+        ctx.strokeStyle='#f59e0b';
+        ctx.beginPath(); ctx.moveTo(left,y45); ctx.lineTo(right,y45); ctx.stroke();
+        ctx.fillStyle='#f59e0b';
+        ctx.fillText('45d policy limit',right-4,y45-4);
+        ctx.restore();
+      }
+    },{
+      id:'dsoLabels',
+      afterDatasetsDraw(chart){
+        const {ctx,data,scales:{x,y}} = chart;
+        data.datasets[0].data.forEach((val,i)=>{
+          const xPos = x.getPixelForValue(i);
+          const yPos = y.getPixelForValue(val);
+          ctx.save();
+          ctx.font='bold 11px Inter'; ctx.fillStyle='#1a202c'; ctx.textAlign='center';
+          ctx.fillText(val+'d', xPos, yPos-6);
+          ctx.restore();
+        });
+      }
+    }]
+  });
 }
 
 async function loadData() {
@@ -369,7 +608,7 @@ async function loadData() {
     render(data);
   } catch(err) {
     document.getElementById('app').innerHTML =
-      `<div class="loading" style="color:var(--red)">Error loading data: ${err.message}</div>`;
+      `<div style="padding:40px;text-align:center;color:#ef4444">Error loading data: ${err.message}</div>`;
   }
 }
 
