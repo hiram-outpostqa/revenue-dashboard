@@ -182,12 +182,10 @@ function render(d) {
       const b = (bills||{})[mo]||0;
       const r = (recv||{})[mo]||0;
       if (!b && !r) return '';
-      const rt = b>0?Math.min(200,r/b*100):0;
       return `<tr>
         <td>${mo}</td>
         <td>${usdFull(b)}</td>
-        <td style="color:${rt>=95?'#10b981':rt>=80?'#f59e0b':'#ef4444'}">${usdFull(r)}</td>
-        <td>${badge(rt)}</td>
+        <td style="color:#10b981">${usdFull(r)}</td>
       </tr>`;
     }).join('');
   }
@@ -216,12 +214,12 @@ function render(d) {
         <div>${invTable(cl.invoices||[])}</div>
         <div>
           <table>
-            <thead><tr><th>Month</th><th>Billed</th><th>Received</th><th>Rate</th></tr></thead>
+            <thead><tr><th>Month</th><th>Billed</th><th>Received</th></tr></thead>
             <tbody>${moRows(cl.bills, cl.received_mo)}</tbody>
             <tfoot><tr style="border-top:1px solid #e2e8f0;font-weight:600">
               <td>Total</td><td>${usdFull(cl.billed||0)}</td>
               <td style="color:#10b981">${usdFull(cl.received||0)}</td>
-              <td>${badge(rt)}</td>
+              
             </tr></tfoot>
           </table>
         </div>
